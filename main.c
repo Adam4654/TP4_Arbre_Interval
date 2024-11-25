@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 #include"tp4.h"
 #define MAX_MEMORY 5
@@ -19,23 +20,43 @@ int main() {
         printf("\n6. Supprimer une réservation");
         printf("\n7. Quitter");
         printf("\n======================================");
-        printf("\n   Votre choix ? ");
+        printf("\n   Votre choix : ");
         choix = getchar();
 
         switch (choix) {
             case '1':
+                viderBuffer ();
                 break;
             case '2':
+                viderBuffer ();
                 break;
             case '3':
+                viderBuffer ();
                 break;
             case '4':
+                viderBuffer ();
+                T_inter date;
+                int ID=0;
+                char* des="no description";
+                printf("entrer votre interval,borne Inférieur:");
+                scanf("%d",&date.borneInf);
+                printf("\tborne Supérieur:");
+                scanf("%d",&date.borneSup);
+                T_Noeud* N=(T_Noeud*)malloc(sizeof(T_Noeud));
+                printf("\nentrer votre ID entreprise:");
+                scanf("%d",&ID);
+                printf("\nentrer votre objet:");
+                scanf("%s",des);
+                Noeud_constructor(N,date,ID,des,NULL,NULL);
                 break;
             case '5':
+                viderBuffer ();
                 break;
             case '6':
+                viderBuffer ();
                 break;
             default:
+                viderBuffer ();
                 break;
         }
         printf("\n\n\n");

@@ -11,10 +11,8 @@ stdio.h
 -
 string.h
 -
-tp4.h
-D:/Clion/AlgoetPro/TP4/tp4.h
-
-D:/Clion/AlgoetPro/TP4/tp4.c
+stdlib.h
+-
 tp4.h
 D:/Clion/AlgoetPro/TP4/tp4.h
 
