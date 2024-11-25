@@ -1,5 +1,9 @@
-#ifndef TP4_H_INCLUDED
-#define TP4_H_INCLUDED
+//
+// Created by xiangyang on 2024/11/26.
+//
+
+#ifndef TP4_TP4_H
+#define TP4_TP4_H
 
 typedef struct Intervalle{
     int borneInf;
@@ -10,11 +14,13 @@ typedef struct Noeud{
     T_Inter date;
     int idInter;
     char* descrip;
-    T_Noeud* fisGauche;
-    T_Noeud* fisDroite;
+    struct Noeud* fisGauche;
+    struct Noeud* fisDroite;
 } T_Noeud;
 
 typedef T_Noeud* T_Arbre;
 
+// fonction qui permet de vider le buffer d'entrée clavier
+void viderBuffer ();
 
-#endif // TP4_H_INCLUDED
+#endif //TP4_TP4_H

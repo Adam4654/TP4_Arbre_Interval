@@ -5,6 +5,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
   "D:/Clion/AlgoetPro/TP4/main.c" "D:/Clion/AlgoetPro/TP4/cmake-build-debug/CMakeFiles/TP4.dir/main.c.obj"
+  "D:/Clion/AlgoetPro/TP4/tp4.c" "D:/Clion/AlgoetPro/TP4/cmake-build-debug/CMakeFiles/TP4.dir/tp4.c.obj"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 

@@ -149,6 +149,33 @@ main.c.s:
 	$(MAKE) -f CMakeFiles\TP4.dir\build.make CMakeFiles/TP4.dir/main.c.s
 .PHONY : main.c.s
 
+tp4.obj: tp4.c.obj
+
+.PHONY : tp4.obj
+
+# target to build an object file
+tp4.c.obj:
+	$(MAKE) -f CMakeFiles\TP4.dir\build.make CMakeFiles/TP4.dir/tp4.c.obj
+.PHONY : tp4.c.obj
+
+tp4.i: tp4.c.i
+
+.PHONY : tp4.i
+
+# target to preprocess a source file
+tp4.c.i:
+	$(MAKE) -f CMakeFiles\TP4.dir\build.make CMakeFiles/TP4.dir/tp4.c.i
+.PHONY : tp4.c.i
+
+tp4.s: tp4.c.s
+
+.PHONY : tp4.s
+
+# target to generate assembly for a file
+tp4.c.s:
+	$(MAKE) -f CMakeFiles\TP4.dir\build.make CMakeFiles/TP4.dir/tp4.c.s
+.PHONY : tp4.c.s
+
 # Help Target
 help:
 	@echo The following are some of the valid targets for this Makefile:
@@ -161,6 +188,9 @@ help:
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s
+	@echo ... tp4.obj
+	@echo ... tp4.i
+	@echo ... tp4.s
 .PHONY : help
 
 

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include"tp4.h"
 #define MAX_MEMORY 5
 
 int main() {

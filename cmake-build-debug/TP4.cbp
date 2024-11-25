@@ -77,6 +77,12 @@
 		<Unit filename="D:/Clion/AlgoetPro/TP4/main.c">
 			<Option target="TP4"/>
 		</Unit>
+		<Unit filename="D:/Clion/AlgoetPro/TP4/tp4.c">
+			<Option target="TP4"/>
+		</Unit>
+		<Unit filename="D:/Clion/AlgoetPro/TP4/tp4.h">
+			<Option target="TP4"/>
+		</Unit>
 		<Unit filename="D:/Clion/AlgoetPro/TP4/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>
