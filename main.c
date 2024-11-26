@@ -42,6 +42,8 @@ int main() {
                 scanf("%d",&date.borneInf);
                 printf("\t\t\tborne Supérieur:");
                 scanf("%d",&date.borneSup);
+                if(!valide_interval(date))
+                    break;
                 printf("\nentrer votre ID entreprise:");
                 scanf("%d",&ID);
                 printf("\nentrer votre objet:");

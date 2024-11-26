@@ -34,6 +34,8 @@ void Noeud_constructor( T_Noeud *p,
                         struct Noeud* fisDroite);
 
 void insert_Noeud(T_Arbre *abr,T_Noeud *New);
+
+int valide_interval(T_inter);
 /*****************************************déclaration des fonctions à implémenter*****************************/
 
 //1.Créer un noeud
