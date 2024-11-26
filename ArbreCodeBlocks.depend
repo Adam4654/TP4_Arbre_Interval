@@ -1,0 +1,15 @@
+# depslib dependency file v1.0
+1732652836 source:c:\kristi_utc\gi05\nf16\tp\tp4\tp4_arbre_interval\main.c
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	"tp4.h"
+
+1732649874 c:\kristi_utc\gi05\nf16\tp\tp4\tp4_arbre_interval\tp4.h
+
+1732652684 source:c:\kristi_utc\gi05\nf16\tp\tp4\tp4_arbre_interval\tp4.c
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	"tp4.h"
+

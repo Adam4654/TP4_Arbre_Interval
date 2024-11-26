@@ -1,10 +1,11 @@
 //
 // Created by xiangyang on 2024/11/26.
 //
-#include<stdio.h>
+#include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include "tp4.h"
+
 // fonction qui permet de vider le buffer d'entrée clavier
 void viderBuffer (){
     char c;
@@ -103,10 +104,13 @@ int valide_interval(T_inter date){      //manque les cas de recherce les date de
 
 /*****************************************déclaration des fonctions à implémenter*****************************/
 //1.Créer un noeud
-T_Noeud *creer_noeud(int id_entr, char *objet, T_inter intervalle){
+T_Noeud* creer_noeud(int id_entr, char* objet, T_inter intervalle){
     //1.Créer un noeud
-    T_Noeud *N = (T_Noeud *)malloc(sizeof(T_Noeud));
-    N->date=intervalle;
+    T_Noeud* N = (T_Noeud*)malloc(sizeof(T_Noeud));
+    
+    //Initialisation:
+    N->date = intervalle;
+    N->descrip = (char*)malloc(sizeof(char) * (strlen(objet)+1));
     strcpy(N->descrip,objet);
     N->idInter = id_entr;
     N->fisDroite=NULL;

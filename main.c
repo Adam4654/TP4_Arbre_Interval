@@ -2,12 +2,12 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include"tp4.h"
+#include "tp4.h"
 #define MAX_MEMORY 5
 
 int main() {
     //========Initialisation=========//
-    T_Arbre *arbre=NULL;      //pointeur vers la racine
+    T_Arbre* arbre = NULL;      //pointeur vers la racine
     // ============= MENU UTILISATEUR ============= */
     char choix = ' ';
     while (choix != '7') {
