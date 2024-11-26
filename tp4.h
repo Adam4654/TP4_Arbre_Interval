@@ -32,6 +32,8 @@ void Noeud_constructor( T_Noeud *p,
                         char* descrip,
                         struct Noeud* fisGauche,
                         struct Noeud* fisDroite);
+
+void insert_Noeud(T_Arbre *abr,T_Noeud *New);
 /*****************************************déclaration des fonctions à implémenter*****************************/
 
 //1.Créer un noeud

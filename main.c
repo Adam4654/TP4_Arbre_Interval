@@ -7,7 +7,7 @@
 
 int main() {
     //========Initialisation=========//
-    //Creation d'un memoire (liste de matrices)
+    T_Arbre *arbre=NULL;      //pointeur vers la racine
     // ============= MENU UTILISATEUR ============= */
     char choix = ' ';
     while (choix != '7') {
@@ -37,17 +37,17 @@ int main() {
                 viderBuffer ();
                 T_inter date;
                 int ID=0;
-                char* des="no description";
+                char des[100]="no description";
                 printf("entrer votre interval,borne Inférieur:");
                 scanf("%d",&date.borneInf);
-                printf("\tborne Supérieur:");
+                printf("\t\t\tborne Supérieur:");
                 scanf("%d",&date.borneSup);
-                T_Noeud* N=(T_Noeud*)malloc(sizeof(T_Noeud));
                 printf("\nentrer votre ID entreprise:");
                 scanf("%d",&ID);
                 printf("\nentrer votre objet:");
                 scanf("%s",des);
-                Noeud_constructor(N,date,ID,des,NULL,NULL);
+                //T_Noeud* N=(T_Noeud*)malloc(sizeof(T_Noeud));
+                ajouter(arbre,ID,des,date);
                 break;
             case '5':
                 viderBuffer ();
@@ -60,7 +60,7 @@ int main() {
                 break;
         }
         printf("\n\n\n");
-        //viderBuffer();
+        viderBuffer();
     }
     return 0;
 }
