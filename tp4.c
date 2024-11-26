@@ -56,7 +56,7 @@ int valide_interval(T_inter date){      //manque les cas de recherce les date de
     inf_m=date.borneInf/100;
     inf_j=date.borneInf-date.borneInf*100;
     sup_m=date.borneSup/100;
-    sup_j=date.borneInf-date.borneSup*100;
+    sup_j=date.borneSup-date.borneSup*100;
     if(inf_m<1||inf_m>12){
         printf("date de début n'est pas valide");
         return 0;
@@ -128,18 +128,38 @@ void ajouter(T_Arbre *abr, int id_entr, char *objet, T_inter intervalle){
 
 //6.Afficher toutes les réservations présentes dans l’arbre
 void afficher_abr(T_Arbre abr){
-    if(!abr)
-        printf("Arbre est vide");
-    else {
-        printf("Nom de Entreprise")
-        *abr->
+    int inf_m=0,sup_m=0,inf_j=0,sup_j=0;
+    inf_m=abr->date.borneInf/100;
+    inf_j=abr->date.borneInf-abr->date.borneInf*100;
+    sup_m=abr->date.borneSup/100;
+    sup_j=abr->date.borneSup-abr->date.borneSup*100;
+    if(abr){
+        printf("Numéro de Entreprise:%d",abr->idInter);
+        printf("Nom de Entreprise:%s",abr->descrip);
+        printf("début de %d/%d, fin de %d/%d",inf_m,inf_j,sup_m,sup_j);
+        afficher_abr(abr->fisGauche);
+        afficher_abr(abr->fisDroite);
     }
     return;
 }
 
 //7.Afficher les réservations d’une entreprise
 void afficher_entr(T_Arbre abr, int id_entr){
-
+    int inf_m=0,sup_m=0,inf_j=0,sup_j=0;
+    inf_m=abr->date.borneInf/100;
+    inf_j=abr->date.borneInf-abr->date.borneInf*100;
+    sup_m=abr->date.borneSup/100;
+    sup_j=abr->date.borneSup-abr->date.borneSup*100;
+    if(abr){
+        if (abr->idInter==id_entr) {
+            printf("Numéro de Entreprise:%d", abr->idInter);
+            printf("Nom de Entreprise:%s", abr->descrip);
+            printf("début de %d/%d, fin de %d/%d", inf_m, inf_j, sup_m, sup_j);
+            afficher_entr(abr->fisGauche,id_entr);
+            afficher_entr(abr->fisDroite,id_entr);
+        }
+    }
+    return;
 }
 
 //8.Afficher toutes les réservations sur une période
