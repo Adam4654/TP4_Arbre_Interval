@@ -62,7 +62,7 @@ int main() {
                     if(formated = formaterDate(day, month, leap)){ //valider & convert date
                         dateOK = 1;
                     }else{
-                        printf("Invalide!\n")
+                        printf("Invalide!\n");
                     }
                 }
                 date.borneInf = formated;
@@ -77,10 +77,10 @@ int main() {
                         dateOK = 1;
                         if(date.borneInf>=formated){ //Si la date valide en existance verifier
                             dateOK = 0;                 // si plus grand que la date debut
-                            printf("Date de debut < Date de fin!\n")
+                            printf("Date de debut < Date de fin!\n");
                         }
                     }else{
-                        printf("Invalide!\n")
+                        printf("Invalide!\n");
                     }
                 }
                 date.borneSup = formated;
