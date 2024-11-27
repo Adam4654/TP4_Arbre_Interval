@@ -45,7 +45,7 @@ int main() {
             case '3':
                 viderBuffer ();
                 break;
-            case '4':
+            case '4':{
 
                 T_inter date;
                 char dateOK = 0;
@@ -119,6 +119,7 @@ int main() {
                 */
                 viderBuffer ();
                 break;
+            }
             case '5':
                 viderBuffer ();
                 break;
