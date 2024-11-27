@@ -45,7 +45,7 @@ int main() {
             case '3':
                 viderBuffer ();
                 break;
-            case '4':
+            case '4':{
 
                 T_inter date;
                 char dateOK = 0;
@@ -97,7 +97,7 @@ int main() {
 
                 ajouter(&arbre, id, desc, date);
 
-
+            }
 /*             printf("\t\t\tborne Supérieur:");
                scanf("%d",&date.borneSup);
                 if(!valide_interval(date))
