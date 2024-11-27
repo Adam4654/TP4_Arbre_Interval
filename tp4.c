@@ -15,6 +15,7 @@ void viderBuffer (){
 }
 
 /*****************************************Fonctions des étudiant**********************************************/
+/* old
 void Intervalle_constructor(T_inter* p, int borneInf, int borneSup){
     p->borneInf = borneInf;
     p->borneSup = borneSup;
@@ -101,7 +102,7 @@ int valide_interval(T_inter date){      //manque les cas de recherce les date de
     return 1;
 }
 
-
+*/
 /*****************************************déclaration des fonctions à implémenter*****************************/
 //1.Créer un noeud - **Done**
 T_Noeud* creer_noeud(int id_entr, char* objet, T_inter intervalle){
