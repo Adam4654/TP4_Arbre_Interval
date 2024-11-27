@@ -64,5 +64,5 @@ void afficher_periode(T_Arbre abr, T_inter periode);
 
 /******Fonction Supplementaire*****/
 int formaterDate(int, int, char); //Return la date formater MMDD  0 si date non valide
-
+void deFormaterData(char [3], char [3], int date);
 #endif //TP4_TP4_H

@@ -218,16 +218,16 @@ int formaterDate(int day, int month, char isLeap){
 
     //Tester la validite de jour
     switch(month){
-        case '1':
-        case '3':
-        case '5':
-        case '7':
-        case '8':
-        case '10':
-        case '12':
+        case 1:
+        case 3:
+        case 5:
+        case 7:
+        case 8:
+        case 10:
+        case 12:
             maxDay = 31;
             break;
-        case '2':
+        case 2:
             if(isLeap)  maxDay = 29;
             else        maxDay = 28;
             break;
@@ -237,4 +237,19 @@ int formaterDate(int day, int month, char isLeap){
     if(day<1 || day>maxDay) return 0;
 
     return month*100+day;
+}
+
+void deFormaterData(char day[3], char month[3], int date){
+    char temp[5];
+    sprintf(temp, "%d\0", date);
+    if((int)strlen(temp) == 4){  // if MMDD\0
+        strncpy(month, temp, 2); //skip MM
+        strncpy(day, &temp[2], 3); //Je ne sais pas mais si je copie seul 2 il n'ajout pas \0
+    }else{
+        month[0] = '0';             // if -MDD\0
+        month[1]= temp[0];         //skip M
+        month[2] = '\0';
+        strncpy(day, &temp[1], 3);
+    }
+    return;
 }
