@@ -57,7 +57,7 @@ int main() {
                 while(!dateOK){ //Borne inferieur
                     printf("Date de debut (jj/mm): ");
                     //Utilisateur peut diviser les jj/mm ou jj.mm ou jj mm ou jj\nmm
-                    scanf(" %d%*[./ \n]%d", &day, &month);
+                    scanf(" %d%*[./ -\n]%d", &day, &month);
                     printf("\nDebut - Jour: %d  Mois: %d", day, month);
                     if(formated = formaterDate(day, month, leap)){ //valider & convert date
                         dateOK = 1;
@@ -71,13 +71,13 @@ int main() {
                 while(!dateOK){ //Borne supperieur
                     printf("\nDate de fin (jj/mm): ");
                     //Utilisateur peut diviser les jj/mm ou jj.mm ou jj mm ou jj\nmm
-                    scanf(" %d%*[./ \n]%d", &day, &month);
+                    scanf(" %d%*[./ -\n]%d", &day, &month);
                     printf("\nFin - Jour: %d  Mois: %d", day, month);
                     if(formated = formaterDate(day, month, leap)){
                         dateOK = 1;
-                        if(date.borneInf>=formated){ //Si la date valide en existance verifier
+                        if(date.borneInf>formated){ //Si la date valide en existance verifier
                             dateOK = 0;                 // si plus grand que la date debut
-                            printf("\nDate de debut < Date de fin!\n");
+                            printf("\nDate de debut <= Date de fin!\n");
                         }
                     }else{
                         printf(" \t\t--Invalide!\n");
@@ -97,15 +97,7 @@ int main() {
 
                 ajouter(&arbre, id, desc, date);
 
-                char day_string_debut[3], month_string_debut[3], date_string[5];
-                char day_string_fin[3], month_string_fin[3];
 
-                deFormaterData(day_string_debut, month_string_debut, arbre->date.borneInf);
-                deFormaterData(day_string_fin, month_string_fin, arbre->date.borneSup);
-
-
-                printf("Ajoutee: %d. %s. %s/%s - %s/%s", arbre->idInter, arbre->descrip,\
-                        day_string_debut, month_string_debut, day_string_fin, month_string_fin);
 /*             printf("\t\t\tborne Supérieur:");
                scanf("%d",&date.borneSup);
                 if(!valide_interval(date))

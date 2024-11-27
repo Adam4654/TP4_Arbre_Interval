@@ -64,5 +64,8 @@ void afficher_periode(T_Arbre abr, T_inter periode);
 
 /******Fonction Supplementaire*****/
 int formaterDate(int, int, char); //Return la date formater MMDD  0 si date non valide
-void deFormaterData(char [3], char [3], int date);
+void deFormater_DayMonth(char [3], char [3], int date); //Recuperer le jour et le mois de format MMDD
+char* deFormaterDate_String(int date); //retourner date deformater dd/mm
+void free_noeud(T_Noeud*);
+void afficher_noeud(T_Noeud*); //print les data d'un observation
 #endif //TP4_TP4_H

@@ -125,34 +125,112 @@ void ajouter(T_Arbre* abr, int id_entr, char* objet, T_inter intervalle){
     T_Noeud* newNoeud = creer_noeud(id_entr, objet, intervalle);
     if(*abr == NULL){
         *abr = newNoeud;
+        printf("Success!\n");
+        afficher_noeud(newNoeud);
         return;
     }
 
 
     //Trouver la place est tester si chauvache ou pas
-    /**TO-DO: TESTE DE overlap of max
+    /**DONE: TESTE DE overlap of max
     trouver pred et succ et tester le sup < inf(succ) et inf > sup(predd)
     */
     T_Noeud* select = *abr;
     T_Noeud* pereSelect = NULL;
+    T_Noeud* succ = NULL; //C'est le derniere pere qui a eu notre neoud fis gauche
+
+
     char lastOper = 0; //-1 si select fis gauche de pereSelect 1 si select fis droite
+
     while(select!=NULL){
         pereSelect = select;
-        if( newNoeud->date.borneInf < select->date.borneInf){
+        //Passer en gauche
+        if( newNoeud->date.borneInf < select->date.borneInf){ //Reste a tester borne superieur
+            succ = select;
             select = select->fisGauche;
             lastOper = -1;
         }
-        else{
+        //Passer en droite
+        else if( select->date.borneSup < newNoeud->date.borneInf ){ //Reste a tester borne supperieur
             select = select->fisDroite;
             lastOper = 1;
+        //Chevauche niv.1 Borne Inferieur
+        }else{
+            printf("\n \033[31mIntervalle Conflictuelle! Salle deja reserver dans cette creneau d'oraire\033[0m\nChevauche niveau 1 - Date de debut");
+            char* temp = NULL;
+            char intervalleDate[50];
+            strcpy(intervalleDate, "\0");
+            temp = deFormaterDate_String(select->date.borneInf);
+            strcat(intervalleDate, temp);
+            free(temp);
+            temp = deFormaterDate_String(select->date.borneSup);
+            strcat(intervalleDate, "\t-\t");
+            strcat(intervalleDate, temp);
+            free(temp);
+
+            printf("\nEvenement: \t%20.20s. | id=%d | %s \n", select->descrip, select->idInter, intervalleDate);
+
+            strcpy(intervalleDate, "\t\0");
+            temp = deFormaterDate_String(newNoeud->date.borneInf);
+            strcat(intervalleDate, temp);
+            printf("\nConflicting: \t%20.20s. | id=%d | \033[31m %s\t\033[0m", newNoeud->descrip, newNoeud->idInter, intervalleDate);
+            free(temp);
+            temp = deFormaterDate_String(newNoeud->date.borneSup);
+            printf("- %s", temp);
+            free(temp);
+            //Libere moemoire (donne le possibiliter pour update?)
+            free_noeud(newNoeud);
+            return;
         }
     }
-    //Ajouter novelle noeud. est-ce que cela chevauche????
-    if(lastOper == -1){
-        pereSelect->fisGauche = newNoeud;
-    }else{
-        pereSelect->fisDroite = newNoeud;
+    //Chevauche niv 2 Borne Supperieur
+    //Ajouter novelle noeud. Le borne inferieur c'estait deja teste - pas besoin de predecesseur
+    if(lastOper == -1){     //Fis gauche
+        // Teste Successeur   - le successeur c'est exactement son pere
+        if( newNoeud->date.borneSup < pereSelect->date.borneInf){
+            pereSelect->fisGauche = newNoeud;
+            printf("Success!\n");
+            afficher_noeud(newNoeud);
+            return;
+        }
+    }else{  // Fis droite, reste a tester le borneSup < borneInf(succ)
+            //Maximum si n'est pas fis droite d'aucune pere == pas de succ
+        if( (succ==NULL) || (succ!=NULL && newNoeud->date.borneSup < succ->date.borneInf)){
+            pereSelect->fisDroite = newNoeud;
+            printf("Success!\n");
+            afficher_noeud(newNoeud);
+            return;
+        }
     }
+
+
+    //Cas chauvache niveaux 2, borne supperieur dans une autre intervalle:
+    printf("\n\033[31mIntervalle Conflictuelle! Salle deja reserver dans cette creneau d'oraire\033[0m\nChevauche niveau 1 - Date de fin");
+    char* temp = NULL;
+    char intervalleDate[50];
+    strcpy(intervalleDate, "\t\0");
+    temp = deFormaterDate_String(succ->date.borneInf);
+    strcat(intervalleDate, temp);
+    free(temp);
+    temp = deFormaterDate_String(succ->date.borneSup);
+    strcat(intervalleDate, "\t-\t");
+    strcat(intervalleDate, temp);
+    free(temp);
+
+    printf("\nEvenement: \t%20.20s. | id=%d | %s \n", succ->descrip, succ->idInter, intervalleDate);
+
+    strcpy(intervalleDate, "\0");
+    temp = deFormaterDate_String(newNoeud->date.borneInf);
+    strcat(intervalleDate, temp);
+    printf("\nConflicting: \t%20.20s. | id=%d | %s\t- ", newNoeud->descrip, newNoeud->idInter, intervalleDate);
+    free(temp);
+    temp = deFormaterDate_String(newNoeud->date.borneSup);
+    printf("\033[31m %s\033[0m\n", temp);
+    free(temp);
+    //Liberer le memoire
+    free_noeud(newNoeud);
+    return;
+
 }
 
 /* old
@@ -239,7 +317,7 @@ int formaterDate(int day, int month, char isLeap){
     return month*100+day;
 }
 
-void deFormaterData(char day[3], char month[3], int date){
+void deFormater_DayMonth(char day[3], char month[3], int date){
     char temp[5];
     sprintf(temp, "%d\0", date);
     if((int)strlen(temp) == 4){  // if MMDD\0
@@ -248,8 +326,36 @@ void deFormaterData(char day[3], char month[3], int date){
     }else{
         month[0] = '0';             // if -MDD\0
         month[1]= temp[0];         //skip M
-        month[2] = '\0';
         strncpy(day, &temp[1], 3);
     }
+    month[2] = '\0';
+    day[2] = '\0';
     return;
+}
+
+char* deFormaterDate_String(int date){
+    char day[3];
+    char mois[3];
+    char* dataString = malloc(sizeof(char)*15);
+    deFormater_DayMonth(day, mois, date);
+    sprintf(dataString, "%s/%s", day, mois);
+    return dataString;
+}
+
+void afficher_noeud(T_Noeud* N){
+    char day_string_debut[3], month_string_debut[3], date_string[5];
+    char day_string_fin[3], month_string_fin[3];
+
+    deFormater_DayMonth(day_string_debut, month_string_debut, N->date.borneInf);
+    deFormater_DayMonth(day_string_fin, month_string_fin, N->date.borneSup);
+
+
+    printf("Ajoutee: %d. %s. %s/%s - %s/%s", N->idInter, N->descrip,\
+        day_string_debut, month_string_debut, day_string_fin, month_string_fin);
+    return;
+}
+
+void free_noeud(T_Noeud* N){
+    free(N->descrip);
+    free(N);
 }
