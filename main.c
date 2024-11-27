@@ -111,7 +111,6 @@ int main() {
                 */
                 viderBuffer ();
                 break;
-            }
             case '5':
                 viderBuffer ();
                 break;
