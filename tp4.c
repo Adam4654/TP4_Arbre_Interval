@@ -103,22 +103,58 @@ int valide_interval(T_inter date){      //manque les cas de recherce les date de
 
 
 /*****************************************déclaration des fonctions à implémenter*****************************/
-//1.Créer un noeud
+//1.Créer un noeud - **Done**
 T_Noeud* creer_noeud(int id_entr, char* objet, T_inter intervalle){
     //1.Créer un noeud
     T_Noeud* N = (T_Noeud*)malloc(sizeof(T_Noeud));
-    
+
     //Initialisation:
     N->date = intervalle;
     N->descrip = (char*)malloc(sizeof(char) * (strlen(objet)+1));
-    strcpy(N->descrip,objet);
+    strcpy(N->descrip, objet);
     N->idInter = id_entr;
-    N->fisDroite=NULL;
-    N->fisGauche=NULL;
+    N->fisDroite = NULL;
+    N->fisGauche = NULL;
     return N;
 }
 
 //2.Ajouter une réservation
+void ajouter(T_Arbre* abr, int id_entr, char* objet, T_inter intervalle){
+    //Si l'arbre est vide on ajout notre element
+    T_Noeud* newNoeud = creer_noeud(id_entr, objet, intervalle);
+    if(*abr == NULL){
+        *abr = newNoeud;
+        return;
+    }
+
+
+    //Trouver la place est tester si chauvache ou pas
+    /**TO-DO: TESTE DE overlap of max
+    trouver pred et succ et tester le sup < inf(succ) et inf > sup(predd)
+    */
+    T_Noeud* select = *abr;
+    T_Noeud* pereSelect = NULL;
+    char lastOper = 0; //-1 si select fis gauche de pereSelect 1 si select fis droite
+    while(select!=NULL){
+        pereSelect = select;
+        if( newNoeud->date.borneInf < select->date.borneInf){
+            select = select->fisGauche;
+            lastOper = -1;
+        }
+        else{
+            select = select->fisDroite;
+            lastOper = 1;
+        }
+    }
+    //Ajouter novelle noeud. est-ce que cela chevauche????
+    if(lastOper == -1){
+        pereSelect->fisGauche = newNoeud;
+    }else{
+        pereSelect->fisDroite = newNoeud;
+    }
+}
+
+/* old
 void ajouter(T_Arbre *abr, int id_entr, char *objet, T_inter intervalle){
     T_Noeud *N = (T_Noeud *)malloc(sizeof(T_Noeud));
     Noeud_constructor(N,intervalle,id_entr,objet,NULL,NULL);
@@ -129,7 +165,7 @@ void ajouter(T_Arbre *abr, int id_entr, char *objet, T_inter intervalle){
     }
     return;
 }
-
+*/
 //6.Afficher toutes les réservations présentes dans l’arbre
 void afficher_abr(T_Arbre abr){
     int inf_m=0,sup_m=0,inf_j=0,sup_j=0;
@@ -172,3 +208,32 @@ void afficher_periode(T_Arbre abr, T_inter periode){
 }
 
 
+/** Fonctions Supplementaire*/
+int formaterDate(int day, int month, char isLeap){
+    int maxDay = 0;
+
+    //Tester la validite de mois
+    if(month>12 || month<1) return 0;
+
+    //Tester la validite de jour
+    switch(month){
+        case '1':
+        case '3':
+        case '5':
+        case '7':
+        case '8':
+        case '10':
+        case '12':
+            maxDay = 31;
+            break;
+        case '2':
+            if(isLeap)  maxDay = 29;
+            else        maxDay = 28;
+            break;
+        default:
+            maxDay = 30;
+    }
+    if(day<1 || day>maxDay) return 0;
+
+    return month*100+day;
+}
