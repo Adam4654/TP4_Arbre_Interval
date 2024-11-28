@@ -16,7 +16,7 @@ int main() {
     //Fixe l'anne
     printf("Bienvenue dans votre organisateur de reservations\n");
     while(year<=0){
-        printf("Anne: ");
+        printf("Annee: ");
         scanf(" %d", &year);
     }
     viderBuffer();
@@ -37,11 +37,17 @@ int main() {
 
         switch (choix) {
             case '1':
+                afficher_abr(arbre);
                 viderBuffer ();
                 break;
-            case '2':
+            case '2':{
+                int ID;
+                printf("ID de l'entreprise: ");
+                scanf("%d",&ID);
+                afficher_entr(arbre,ID);
                 viderBuffer ();
                 break;
+            }
             case '3':
                 viderBuffer ();
                 break;
