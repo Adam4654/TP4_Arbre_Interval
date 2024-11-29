@@ -295,7 +295,31 @@ void afficher_entr(T_Arbre abr, int id_entr){
 
 //8.Afficher toutes les réservations sur une période
 void afficher_periode(T_Arbre abr, T_inter periode){
+    if(abr==NULL) {
 
+    }else{
+        if (abr->date.borneInf>periode.borneInf)
+            afficher_periode(abr->fisGauche,periode);
+        if (abr->date.borneSup<periode.borneInf||abr->date.borneInf>periode.borneSup){
+        }
+        else {
+            int inf_m=0,sup_m=0,inf_j=0,sup_j=0;
+            inf_m=abr->date.borneInf/100;
+            //printf("month1 %d",inf_m);
+            inf_j=abr->date.borneInf-inf_m*100;
+            //printf("day1 %d",inf_j);
+            sup_m=abr->date.borneSup/100;
+            //printf("month2 %d",sup_m);
+            sup_j=abr->date.borneSup-sup_m*100;
+            //printf("day2 %d",sup_j);
+            printf("\nNumero de Entreprise:%d\t", abr->idInter);
+            printf("Nom de Entreprise:%s\t", abr->descrip);
+            printf("debut de %d/%d, fin de %d/%d", inf_m, inf_j, sup_m, sup_j);
+        }
+        if (abr->date.borneInf<periode.borneSup)
+            afficher_periode(abr->fisDroite,periode);
+    }
+    return;
 }
 
 

@@ -48,9 +48,47 @@ int main() {
                 viderBuffer ();
                 break;
             }
-            case '3':
+            case '3':{
+                T_inter date;
+                char dateOK = 0;
+                int day, month, formated;
+
+                //Intervalle de date
+                while(!dateOK){ //Borne inferieur
+                    printf("Date de debut (jj/mm): ");
+                    //Utilisateur peut diviser les jj/mm ou jj.mm ou jj mm ou jj\nmm
+                    scanf(" %d%*[./ -\n]%d", &day, &month);
+                    printf("\nDebut - Jour: %d  Mois: %d", day, month);
+                    if(formated = formaterDate(day, month, leap)){ //valider & convert date
+                        dateOK = 1;
+                    }else{
+                        printf(" \t\t--Invalide!\n");
+                    }
+                }
+                date.borneInf = formated;
+
+                dateOK = 0;
+                while(!dateOK){ //Borne supperieur
+                    printf("\nDate de fin (jj/mm): ");
+                    //Utilisateur peut diviser les jj/mm ou jj.mm ou jj mm ou jj\nmm
+                    scanf(" %d%*[./ -\n]%d", &day, &month);
+                    printf("\nFin - Jour: %d  Mois: %d", day, month);
+                    if(formated = formaterDate(day, month, leap)){
+                        dateOK = 1;
+                        if(date.borneInf>formated){ //Si la date valide en existance verifier
+                            dateOK = 0;                 // si plus grand que la date debut
+                            printf("\nDate de debut <= Date de fin!\n");
+                        }
+                    }else{
+                        printf(" \t\t--Invalide!\n");
+                    }
+                }
+                date.borneSup = formated;
+                afficher_periode(arbre, date);
                 viderBuffer ();
                 break;
+            }
+
             case '4':{
 
                 T_inter date;
