@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include "tp4.h"
 
+extern leap;
+
 // fonction qui permet de vider le buffer d'entrée clavier
 void viderBuffer (){
     char c;
@@ -125,8 +127,8 @@ void ajouter(T_Arbre* abr, int id_entr, char* objet, T_inter intervalle){
     T_Noeud* newNoeud = creer_noeud(id_entr, objet, intervalle);
     if(*abr == NULL){
         *abr = newNoeud;
-        printf("Success!\n");
         afficher_noeud(newNoeud);
+        printf("\t\tSuccess! 0");
         return;
     }
 
@@ -189,16 +191,16 @@ void ajouter(T_Arbre* abr, int id_entr, char* objet, T_inter intervalle){
         // Teste Successeur   - le successeur c'est exactement son pere
         if( newNoeud->date.borneSup < pereSelect->date.borneInf){
             pereSelect->fisGauche = newNoeud;
-            printf("Success!\n");
             afficher_noeud(newNoeud);
+            printf("\t\tSuccess! G");
             return;
         }
     }else{  // Fis droite, reste a tester le borneSup < borneInf(succ)
             //Maximum si n'est pas fis droite d'aucune pere == pas de succ
         if( (succ==NULL) || (succ!=NULL && newNoeud->date.borneSup < succ->date.borneInf)){
             pereSelect->fisDroite = newNoeud;
-            printf("Success!\n");
             afficher_noeud(newNoeud);
+            printf("\t\tSuccess! D");
             return;
         }
     }
@@ -245,13 +247,83 @@ void ajouter(T_Arbre *abr, int id_entr, char *objet, T_inter intervalle){
     return;
 }
 */
+
+// 3.Rechercher une réservation :
+
+T_Noeud* rechercher(T_Arbre abr, T_inter intervalle, int id_entr){
+    T_Noeud* select = abr;
+    //Intervalle pas forcement exacte a reservation. Il SUFFIT DE ETRE CONTENU en DEDANS intervale de reservation
+    while(select != NULL){
+        //Si intervale furnit dans une reservation
+        if( (intervalle.borneInf >= select->date.borneInf) && (intervalle.borneSup <= select->date.borneSup)){
+            if(id_entr == select->idInter){ //Si id furnit correspend au intervale trouver
+                return select;
+            }else{                          //Si id furnit ne correspend pas
+                printf("\nIntervalle trouver, mais pas de idInter = %5d. \nVouliez-vous dire idInterprise: %5d ?", id_entr, select->idInter);
+                return NULL;
+            }
+        }
+        //Si intervale a gauche
+        if(intervalle.borneInf < select->date.borneInf){
+            select = select->fisGauche;
+        //Si intervale a droite
+        }else if(select->date.borneSup < intervalle.borneInf){
+            select = select->fisDroite;
+        }else{  //Ni droite ni gauche c-a-d intervale entre 2 evenements differents:
+            return NULL;
+        }
+    }
+}
+
+
+//4.Supprimer une réservation
+void supprimer(T_Arbre *abr, T_inter intervalle, int id_entr){
+    Noeud* select = *abr;
+    Noeud* pereSelect = NULL;
+    char trouver = 0;
+    while( (select != NULL) || (!trouver){
+          //Si on a trouver le interval (exacte ou une partie dedans):
+        if( (intervalle.borneInf >= select->date.borneInf) && (intervalle.borneSup <= select->date.borneSup)){
+            if(id_entr == select->idInter){ //Si le entreprise corespend biensl=,
+                trouver = 1;
+                continue;
+            }else{                          //Si entreprise ne corespend pas
+                printf("\nIntervalle trouver, mais pas de idInter = %5d. \nVouliez-vous dire idInterprise: %5d ?", id_entr, select->idInter);
+                return;
+            }
+        }
+            //Si pas encore trouver
+        pereSelect = select;
+        //Si intervale a gauche
+        if(intervalle.borneInf < select->date.borneInf){
+            select = select->fisGauche;
+        //Si intervale a droite
+        }else if(select->date.borneSup < intervalle.borneInf) {
+            select
+        }else{ //Intervale
+
+        }
+
+
+
+    }
+    if(toDelete = rechercher(racine, intervalle, id_entr)){
+        //Recherer le pere en meme temps (pas possible de utiliser directement rechercher car on dois recommencer le recherche pour le parent.
+        // comme ca on peut cree notre algo plus efficace
+        free_noeud(toDelete);
+    }else{
+        printf("\nCette reservation n'existe pas! Aucune action effectuer.");
+    }
+    return;
+}
+
 //6.Afficher toutes les réservations présentes dans l’arbre
 void afficher_abr(T_Arbre abr){
     if(abr==NULL) {
 
     }else{
         afficher_abr(abr->fisGauche);
-        int inf_m=0,sup_m=0,inf_j=0,sup_j=0;
+        /*int inf_m=0,sup_m=0,inf_j=0,sup_j=0;
         inf_m=abr->date.borneInf/100;
         //printf("month1 %d",inf_m);
         inf_j=abr->date.borneInf-inf_m*100;
@@ -263,6 +335,8 @@ void afficher_abr(T_Arbre abr){
         printf("\nID de Entreprise:%d\t",abr->idInter);
         printf("Objet:%s\t",abr->descrip);
         printf("debut de %d/%d, fin de %d/%d",inf_m,inf_j,sup_m,sup_j);
+        */
+        afficher_noeud(abr);
         afficher_abr(abr->fisDroite);
     }
     return;
@@ -273,6 +347,7 @@ void afficher_entr(T_Arbre abr, int id_entr){
     if(abr==NULL) {
 
     }else{
+        /*
         int inf_m=0,sup_m=0,inf_j=0,sup_j=0;
         inf_m=abr->date.borneInf/100;
         //printf("month1 %d",inf_m);
@@ -282,11 +357,15 @@ void afficher_entr(T_Arbre abr, int id_entr){
         //printf("month2 %d",sup_m);
         sup_j=abr->date.borneSup-sup_m*100;
         //printf("day2 %d",sup_j);
-        afficher_entr(abr->fisGauche,id_entr);
+        */
+        afficher_entr(abr->fisGauche, id_entr);
         if (abr->idInter==id_entr) {
+            afficher_noeud(abr);
+            /*
             printf("\nNumero de Entreprise:%d\t", abr->idInter);
             printf("Nom de Entreprise:%s\t", abr->descrip);
             printf("debut de %d/%d, fin de %d/%d", inf_m, inf_j, sup_m, sup_j);
+            */
         }
         afficher_entr(abr->fisDroite,id_entr);
     }
@@ -303,6 +382,7 @@ void afficher_periode(T_Arbre abr, T_inter periode){
         if (abr->date.borneSup<periode.borneInf||abr->date.borneInf>periode.borneSup){
         }
         else {
+            /*
             int inf_m=0,sup_m=0,inf_j=0,sup_j=0;
             inf_m=abr->date.borneInf/100;
             //printf("month1 %d",inf_m);
@@ -315,6 +395,8 @@ void afficher_periode(T_Arbre abr, T_inter periode){
             printf("\nNumero de Entreprise:%d\t", abr->idInter);
             printf("Nom de Entreprise:%s\t", abr->descrip);
             printf("debut de %d/%d, fin de %d/%d", inf_m, inf_j, sup_m, sup_j);
+            */
+            afficher_noeud(abr);
         }
         if (abr->date.borneInf<periode.borneSup)
             afficher_periode(abr->fisDroite,periode);
@@ -378,6 +460,10 @@ char* deFormaterDate_String(int date){
 }
 
 void afficher_noeud(T_Noeud* N){
+    if(N == NULL){
+        printf("\nNULL - NON-Trouver");
+        return;
+    }
     char day_string_debut[3], month_string_debut[3], date_string[5];
     char day_string_fin[3], month_string_fin[3];
 
@@ -385,7 +471,7 @@ void afficher_noeud(T_Noeud* N){
     deFormater_DayMonth(day_string_fin, month_string_fin, N->date.borneSup);
 
 
-    printf("Ajoutee: %d. %s. %s/%s - %s/%s", N->idInter, N->descrip,\
+    printf("\n%9d | %-30.30s | %s/%s - %s/%s", N->idInter, N->descrip,\
         day_string_debut, month_string_debut, day_string_fin, month_string_fin);
     return;
 }
@@ -393,4 +479,28 @@ void afficher_noeud(T_Noeud* N){
 void free_noeud(T_Noeud* N){
     free(N->descrip);
     free(N);
+}
+
+void printTeteTab(){
+    //printf("%d\n", leap);
+    printf("\033[32m%9s | %26s %4s| %9s\033[0m", "id_Inter", "Description_Evenement", " ", "Date");
+}
+
+int readDate(char debut){
+    char dateOK = 0;
+    int day, month, formated;
+    viderBuffer();
+    //Intervalle de date
+    while(!dateOK){ //Borne inferieur
+        printf("\n\nDate de %s (jj/mm): ", (debut)? "debut" : "fin");
+        //Utilisateur peut diviser les jj/mm ou jj.mm ou jj mm ou jj\nmm
+        scanf(" %d%*[-./ \n]%d", &day, &month);
+        printf("%s - Jour: %d  Mois: %d", (debut)? "Debut" : "Fin", day, month);
+        if(formated = formaterDate(day, month, leap)){ //valider & convert date
+            dateOK = 1;
+        }else{
+            printf(" \t\t--Invalide!\n");
+        }
+    }
+    return formated;
 }
