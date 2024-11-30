@@ -51,7 +51,8 @@ T_Noeud *rechercher(T_Arbre abr, T_inter intervalle, int id_entr);
 void supprimer(T_Arbre *abr, T_inter intervalle, int id_entr);
 
 //5.Modifier les dates d’une réservation
-void modifier(T_Arbre abr, int id_entr, T_inter actuel, T_inter nouveau);
+void modifier(T_Arbre* abr, int id_entr, T_inter actuel, T_inter nouveau);
+//CHANGED PROTOTYPE
 
 //6.Afficher toutes les réservations présentes dans l’arbre
 void afficher_abr(T_Arbre abr);

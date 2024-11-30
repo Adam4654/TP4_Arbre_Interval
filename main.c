@@ -175,8 +175,9 @@ int main() {
                 while (choix2 == ' '){
                     choix2 = getchar();
                     switch(choix2){
-                        case '0':
+                        case '0':{
                             T_inter date;
+                            T_inter dateNew;
                             int id = -1;
                             /* V0.5 - old
                             date.borneInf = readDate(1);
@@ -189,6 +190,10 @@ int main() {
                             }
                             printTeteTab();
                             afficher_noeud(rechercher(arbre, date, id));
+                            printf("\n - Nouvelle periode - \n");
+                            readDate(&dateNew.borneInf, &dateNew.borneSup);
+                            modifier(&arbre, id, date, dateNew);
+                        }
                             break;
                         default:
                             choix2 = ' ';

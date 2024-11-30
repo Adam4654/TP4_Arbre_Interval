@@ -385,6 +385,38 @@ void supprimer(T_Arbre *abr, T_inter intervalle, int id_entr){
     return;*/
 }
 // 5. Modifier les dates d’une réservation :
+void modifier(T_Arbre* abr, int id_entr, T_inter actuel, T_inter nouveau){//PAS LE PLUS OPTIMALE
+    // CAR 2 fois chercher
+
+    if(abr == NULL) return;
+    if(*abr == NULL){
+        printf("\nAucun element!");
+        return;
+    }
+
+    T_Noeud* selected = rechercher(*abr, actuel, id_entr);
+    //Noeud n'existe pas
+    if(!selected){
+      printf("\n Aucun element trouver pour modifier");
+      return;
+    }
+    //Neoud existe
+        //Si les borne nouvelle ne depasse pas leur valeurs originel, pas besoins de changer la structure, juste mettre a jour
+    if(nouveau.borneInf>= selected->date.borneInf && nouveau.borneSup<= selected->date.borneSup){
+        selected->date.borneInf = nouveau.borneInf;
+        selected->date.borneSup = nouveau.borneSup;
+        printf("\nMis a jour!");
+        return;
+    }
+    //Si les borne en dehors d'originale, probeleme de chevauche (soi change structure soi non) \
+        mais plus facile (lisible) et en meme complexite on va reajouter l'element
+    char disc[100];
+    strcpy(disc, selected->descrip);
+    printf("\n");
+    supprimer(abr, selected->date, selected->idInter);
+    ajouter(abr, id_entr, disc, nouveau);
+    return;
+}
 
 
 //6.Afficher toutes les réservations présentes dans l’arbre
