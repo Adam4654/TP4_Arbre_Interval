@@ -107,7 +107,7 @@ int valide_interval(T_inter date){      //manque les cas de recherce les date de
 */
 /*****************************************déclaration des fonctions à implémenter*****************************/
 //1.Créer un noeud - **Done**
-T_Noeud* creer_noeud(int id_entr, char* objet, T_inter intervalle){
+T_Noeud* creer_noeud(int id_entr, char* objet, T_inter intervalle){     //teste pas la date
     //1.Créer un noeud
     T_Noeud* N = (T_Noeud*)malloc(sizeof(T_Noeud));
 
@@ -273,15 +273,19 @@ T_Noeud* rechercher(T_Arbre abr, T_inter intervalle, int id_entr){
             return NULL;
         }
     }
+    return select;
 }
 
 
 //4.Supprimer une réservation
 void supprimer(T_Arbre *abr, T_inter intervalle, int id_entr){
-    Noeud* select = *abr;
-    Noeud* pereSelect = NULL;
+    if(abr == NULL)  return;  //Pas une adresse d'arbre
+    if(*abr == NULL) return; //Arbre vide
+    T_Noeud* select = *abr;
+    T_Noeud* pereSelect = NULL;
     char trouver = 0;
-    while( (select != NULL) || (!trouver){
+    //Trouver l'element a supprimer:
+    while( (select != NULL) && (!trouver)){
           //Si on a trouver le interval (exacte ou une partie dedans):
         if( (intervalle.borneInf >= select->date.borneInf) && (intervalle.borneSup <= select->date.borneSup)){
             if(id_entr == select->idInter){ //Si le entreprise corespend biensl=,
@@ -299,23 +303,89 @@ void supprimer(T_Arbre *abr, T_inter intervalle, int id_entr){
             select = select->fisGauche;
         //Si intervale a droite
         }else if(select->date.borneSup < intervalle.borneInf) {
-            select
-        }else{ //Intervale
-
+            select = select->fisDroite;
+        }else{ //Intervale entre 2 intervalles borne inferiur dans le intervale de select mais borne superieur en dehors
+            printf("\nIntervalle innvalide!");
+            return;
+        }
+    }
+    //Discuter sur element:
+    if(!trouver){ //Parcourir et non trouver Equivalant a select != NULL
+        printf("\nReservation n'existe pas. Aucun action effectuer.");
+        return;
+    }
+    //Suprimer element, les 3 cas (1 fils gauche/droite, aucune fis, 2 fils) * 2 opsion(racine ou pas)
+    if(select->fisDroite == NULL && select->fisGauche == NULL){ //aucun fils
+        if(pereSelect){ //element pas racine
+            if(pereSelect->fisDroite == select){ //si fils droit
+                pereSelect->fisDroite = NULL;
+            }else{                               //si fils gauche
+                pereSelect->fisGauche = NULL;
+            }
+        }else{ // Elements racine et sans fils
+            *abr = NULL;
         }
 
+    //Explusive OR-bitwise, si 1 null et l'autre pas
+    }else if( (select->fisDroite == NULL) ^ (select->fisGauche == NULL) ){
+        if(pereSelect){ //element pas racine
+            if(pereSelect->fisDroite == select){ //si fils droit
+                if(select->fisDroite != NULL){      //si il ya fils droite
+                    pereSelect->fisDroite = select->fisDroite;
+                }else{                              //sinon il y a fils gauche
+                    pereSelect->fisDroite = select->fisGauche;
+                }
+            }else{                               //si fils gauche
+                if(select->fisDroite != NULL){      //si il ya fils droite
+                    pereSelect->fisGauche = select->fisDroite;
+                }else{                              //sinon il y a fils gauche
+                    pereSelect->fisGauche = select->fisGauche;
+                }
+            }
+        }else{ //Si element racine et avec 1 fis on change la racine avec son fis soit droite soit gauche
+            *abr = (select->fisDroite)? select->fisDroite : select->fisGauche;
+        }
 
-
+    //Element possede deux fils, faut le replacer avec leur ici: predecesseur (ou successeur)
+    }else{
+        T_Noeud* succ = select->fisDroite; //le plus gauche de son fis droite
+        while(succ->fisGauche!=NULL){
+            succ = succ->fisGauche;
+        }
+            //copie de successeur et inheriter les nouveaux fils
+        T_Noeud* remplacement = creer_noeud(succ->idInter, succ->descrip, succ->date);
+        supprimer(&select, succ->date, succ->idInter); //supprimer le element copier, mettre a jour l'arbre
+        //remplacement->fisDroite = (succ == select->fisDroite)? select->fisDroite->fisDroite : select->fisDroite; //ne pas copie soi meme
+        remplacement->fisDroite = select->fisDroite;
+        remplacement->fisGauche = select->fisGauche;
+        afficher_noeud(remplacement); printf(" (\033[32m+\033[0m)\t\t\033[32mReAjouted!\033[0m\n");
+        if(pereSelect){ //element pas racine
+            if(pereSelect->fisDroite == select){ //si fils droit
+                pereSelect->fisDroite = remplacement;
+            }else{                               //si fils gauche
+                pereSelect->fisGauche = remplacement;
+            }
+        }else{ // Elements racine et avec 2 fils
+            *abr = remplacement;
+        }
     }
-    if(toDelete = rechercher(racine, intervalle, id_entr)){
+    printTeteTab();
+    //printf("\033[31m-\033[0m");
+    afficher_noeud(select); printf(" (\033[31m-\033[0m)\t\t\033[31m Suprimer!\033[0m\n");
+    //printf("\033[0m\n");
+    free_noeud(select);
+
+/*    if(toDelete = rechercher(racine, intervalle, id_entr)){
         //Recherer le pere en meme temps (pas possible de utiliser directement rechercher car on dois recommencer le recherche pour le parent.
         // comme ca on peut cree notre algo plus efficace
         free_noeud(toDelete);
     }else{
         printf("\nCette reservation n'existe pas! Aucune action effectuer.");
     }
-    return;
+    return;*/
 }
+// 5. Modifier les dates d’une réservation :
+
 
 //6.Afficher toutes les réservations présentes dans l’arbre
 void afficher_abr(T_Arbre abr){
@@ -483,24 +553,43 @@ void free_noeud(T_Noeud* N){
 
 void printTeteTab(){
     //printf("%d\n", leap);
-    printf("\033[32m%9s | %26s %4s| %9s\033[0m", "id_Inter", "Description_Evenement", " ", "Date");
+    printf("\033[33m%9s | %26s %4s| %9s\033[0m", "id_Inter", "Description_Evenement", " ", "Date");
 }
 
-int readDate(char debut){
+void readDate(int* debut, int* fin){
     char dateOK = 0;
     int day, month, formated;
     viderBuffer();
     //Intervalle de date
     while(!dateOK){ //Borne inferieur
-        printf("\n\nDate de %s (jj/mm): ", (debut)? "debut" : "fin");
-        //Utilisateur peut diviser les jj/mm ou jj.mm ou jj mm ou jj\nmm
-        scanf(" %d%*[-./ \n]%d", &day, &month);
-        printf("%s - Jour: %d  Mois: %d", (debut)? "Debut" : "Fin", day, month);
+        printf("Date de debut (jj/mm): ");
+        //Utilisateur peut diviser les jj/mm ou jj.mm ou jj mm ou jj\nmm ou jj-mm
+        scanf(" %d%*[./ -\n]%d", &day, &month);
+        printf("\nDebut - Jour: %d  Mois: %d", day, month);
         if(formated = formaterDate(day, month, leap)){ //valider & convert date
             dateOK = 1;
         }else{
             printf(" \t\t--Invalide!\n");
         }
     }
-    return formated;
+    *debut = formated;
+
+    dateOK = 0;
+    while(!dateOK){ //Borne supperieur
+        printf("\nDate de fin (jj/mm): ");
+        //Utilisateur peut diviser les jj/mm ou jj.mm ou jj mm ou jj\nmm
+        scanf(" %d%*[./ -\n]%d", &day, &month);
+        printf("\nFin - Jour: %d  Mois: %d", day, month);
+        if(formated = formaterDate(day, month, leap)){
+            dateOK = 1;
+            if(*debut>formated){ //Si la date valide en existance verifier
+                dateOK = 0;                 // si plus grand que la date debut
+                printf("\n\033[31mDate de debut <= Date de fin!\033[0m\n");
+            }
+        }else{
+            printf(" \t\t--Invalide!\n");
+        }
+    }
+    *fin = formated;
+    return;
 }

@@ -69,9 +69,11 @@ int main() {
                     }else{
                         printf(" \t\t--Invalide!\n");
                     }
-                }*/
-                date.borneInf = readDate(1);
+                }v0,45*/
+                /*v0.5date.borneInf = readDate(1);
                 date.borneSup = readDate(0);
+                */
+                readDate(&date.borneInf, &date.borneSup);
                 /*while(!dateOK){ //Borne supperieur
                     printf("\nDate de fin (jj/mm): ");
                     //Utilisateur peut diviser les jj/mm ou jj.mm ou jj mm ou jj\nmm
@@ -101,8 +103,8 @@ int main() {
                 //int day, month, formated;
                 int id = -1;
                 char desc[100];
-                date.borneInf = readDate(1);
-                date.borneSup = readDate(0);
+                readDate(&date.borneInf, &date.borneSup);
+                //date.borneSup = readDate(0);
 /*
                 //Intervalle de date
                 while(!dateOK){ //Borne inferieur
@@ -176,8 +178,11 @@ int main() {
                         case '0':
                             T_inter date;
                             int id = -1;
+                            /* V0.5 - old
                             date.borneInf = readDate(1);
                             date.borneSup = readDate(0);
+                            */
+                            readDate(&date.borneInf, &date.borneSup);
                             while(id<0){
                                 printf("\nId de Entreprise: ");
                                 scanf(" %d", &id);
@@ -192,9 +197,18 @@ int main() {
                 }
                 viderBuffer ();
                 break;
-            case '6':
+            case '6':{
+                T_inter date;
+                int id = -1;
+                readDate(&date.borneInf, &date.borneSup);
+                while(id<0){
+                    printf("\nId de Entreprise: ");
+                    scanf(" %d", &id);
+                }
+                supprimer(&arbre, date, id);
                 viderBuffer ();
                 break;
+            }
             case '9':
                 printTeteTab();
                 T_inter date;
@@ -219,7 +233,7 @@ int main() {
 
                 date.borneInf = formaterDate(4, 6, leap);
                 date.borneSup = formaterDate(4, 6, leap);
-                ajouter(&arbre, 1001, "Ditor 2 Qershor", date);
+                ajouter(&arbre, 1001, "Ditor 4 Qershor", date);
 
                 date.borneInf = formaterDate(2, 6, leap);
                 date.borneSup = formaterDate(2, 6, leap);

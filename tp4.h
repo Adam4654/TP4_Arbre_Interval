@@ -69,5 +69,5 @@ char* deFormaterDate_String(int date); //retourner date deformater dd/mm
 void free_noeud(T_Noeud*);
 void afficher_noeud(T_Noeud*); //print les data d'un observation
 void printTeteTab();
-int readDate(char debut); //0 for born superiuer, 1 for born inferiuer
+void readDate(int* debut, int* fin); //0 for born superiuer, 1 for born inferiuer
 #endif //TP4_TP4_H
