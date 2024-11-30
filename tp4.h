@@ -63,6 +63,10 @@ void afficher_entr(T_Arbre abr, int id_entr);
 //8.Afficher toutes les réservations sur une période
 void afficher_periode(T_Arbre abr, T_inter periode);
 
+//9. Détruire tous les nœuds d’un arbre binaire :
+void detruire_arbre(T_Arbre *abr);
+
+
 /******Fonction Supplementaire*****/
 int formaterDate(int, int, char); //Return la date formater MMDD  0 si date non valide
 void deFormater_DayMonth(char [3], char [3], int date); //Recuperer le jour et le mois de format MMDD

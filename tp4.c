@@ -506,8 +506,22 @@ void afficher_periode(T_Arbre abr, T_inter periode){
     return;
 }
 
+//9. Détruire tous les nœuds d’un arbre binaire :
+void detruire_arbre(T_Arbre *abr){
+        //Passage Post Fix
+    if(abr == NULL) return;
+    if(*abr == NULL) return;
+    detruire_arbre(&((*abr)->fisGauche));
+    detruire_arbre(&((*abr)->fisDroite));
+    afficher_noeud(*abr); printf(" (\033[31m-\033[0m)\t\t\033[32m Liberer!\033[0m");
+    free_noeud(*abr);
+
+}
+
 
 /** Fonctions Supplementaire*/
+
+
 int formaterDate(int day, int month, char isLeap){
     int maxDay = 0;
     //Tester la validite de mois
@@ -583,6 +597,9 @@ void free_noeud(T_Noeud* N){
     free(N);
 }
 
+
+
+
 void printTeteTab(){
     //printf("%d\n", leap);
     printf("\033[33m%9s | %26s %4s| %9s\033[0m", "id_Inter", "Description_Evenement", " ", "Date");
@@ -611,7 +628,7 @@ void readDate(int* debut, int* fin){
         printf("\nDate de fin (jj/mm): ");
         //Utilisateur peut diviser les jj/mm ou jj.mm ou jj mm ou jj\nmm
         scanf(" %d%*[./ -\n]%d", &day, &month);
-        printf("\nFin - Jour: %d  Mois: %d", day, month);
+        printf("\nFin - Jour: %d  Mois: %d\n", day, month);
         if(formated = formaterDate(day, month, leap)){
             dateOK = 1;
             if(*debut>formated){ //Si la date valide en existance verifier
@@ -625,3 +642,5 @@ void readDate(int* debut, int* fin){
     *fin = formated;
     return;
 }
+
+

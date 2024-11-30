@@ -195,6 +195,10 @@ int main() {
                             modifier(&arbre, id, date, dateNew);
                         }
                             break;
+
+                         // case 1, 2 t odo later if we use file. juste pour mieux User Interface
+                         // de selecter directement le choix filtrer
+                         // peut etre on ne le fait pas du tout
                         default:
                             choix2 = ' ';
                     }
@@ -273,6 +277,10 @@ int main() {
         }
         printf("\n\n\n");
         viderBuffer();
+    }
+    if(arbre){
+        printTeteTab();
+        detruire_arbre(&arbre);
     }
     return 0;
 }
