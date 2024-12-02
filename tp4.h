@@ -75,4 +75,5 @@ void free_noeud(T_Noeud*);
 void afficher_noeud(T_Noeud*); //print les data d'un observation
 void printTeteTab();
 void readDate(int* debut, int* fin); //0 for born superiuer, 1 for born inferiuer
+void supprimer_recu(T_Arbre *abr, T_inter intervalle, int id_entr);
 #endif //TP4_TP4_H

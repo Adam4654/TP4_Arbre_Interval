@@ -354,11 +354,11 @@ void supprimer(T_Arbre *abr, T_inter intervalle, int id_entr){
         }
             //copie de successeur et inheriter les nouveaux fils
         T_Noeud* remplacement = creer_noeud(succ->idInter, succ->descrip, succ->date);
-        supprimer(&select, succ->date, succ->idInter); //supprimer le element copier, mettre a jour l'arbre
+        supprimer_recu(&select, succ->date, succ->idInter); //supprimer le element copier, mettre a jour l'arbre
         //remplacement->fisDroite = (succ == select->fisDroite)? select->fisDroite->fisDroite : select->fisDroite; //ne pas copie soi meme
         remplacement->fisDroite = select->fisDroite;
         remplacement->fisGauche = select->fisGauche;
-        afficher_noeud(remplacement); printf(" (\033[32m+\033[0m)\t\t\033[32mReAjouted!\033[0m\n");
+        afficher_noeud(remplacement); //printf(" (\033[32m+\033[0m)\t\t\033[32mReAjouted!\033[0m\n");
         if(pereSelect){ //element pas racine
             if(pereSelect->fisDroite == select){ //si fils droit
                 pereSelect->fisDroite = remplacement;
@@ -643,4 +643,110 @@ void readDate(int* debut, int* fin){
     return;
 }
 
+//4.Supprimer une réservation
+void supprimer_recu(T_Arbre *abr, T_inter intervalle, int id_entr){
+    if(abr == NULL)  return;  //Pas une adresse d'arbre
+    if(*abr == NULL) return; //Arbre vide
+    T_Noeud* select = *abr;
+    T_Noeud* pereSelect = NULL;
+    char trouver = 0;
+    //Trouver l'element a supprimer:
+    while( (select != NULL) && (!trouver)){
+        //Si on a trouver le interval (exacte ou une partie dedans):
+        if( (intervalle.borneInf >= select->date.borneInf) && (intervalle.borneSup <= select->date.borneSup)){
+            if(id_entr == select->idInter){ //Si le entreprise corespend biensl=,
+                trouver = 1;
+                continue;
+            }else{                          //Si entreprise ne corespend pas
+                //printf("\nIntervalle trouver, mais pas de idInter = %5d. \nVouliez-vous dire idInterprise: %5d ?", id_entr, select->idInter);
+                return;
+            }
+        }
+        //Si pas encore trouver
+        pereSelect = select;
+        //Si intervale a gauche
+        if(intervalle.borneInf < select->date.borneInf){
+            select = select->fisGauche;
+            //Si intervale a droite
+        }else if(select->date.borneSup < intervalle.borneInf) {
+            select = select->fisDroite;
+        }else{ //Intervale entre 2 intervalles borne inferiur dans le intervale de select mais borne superieur en dehors
+            //printf("\nIntervalle innvalide!");
+            return;
+        }
+    }
+    //Discuter sur element:
+    if(!trouver){ //Parcourir et non trouver Equivalant a select != NULL
+        //printf("\nReservation n'existe pas. Aucun action effectuer.");
+        return;
+    }
+    //Suprimer element, les 3 cas (1 fils gauche/droite, aucune fis, 2 fils) * 2 opsion(racine ou pas)
+    if(select->fisDroite == NULL && select->fisGauche == NULL){ //aucun fils
+        if(pereSelect){ //element pas racine
+            if(pereSelect->fisDroite == select){ //si fils droit
+                pereSelect->fisDroite = NULL;
+            }else{                               //si fils gauche
+                pereSelect->fisGauche = NULL;
+            }
+        }else{ // Elements racine et sans fils
+            *abr = NULL;
+        }
 
+        //Explusive OR-bitwise, si 1 null et l'autre pas
+    }else if( (select->fisDroite == NULL) ^ (select->fisGauche == NULL) ){
+        if(pereSelect){ //element pas racine
+            if(pereSelect->fisDroite == select){ //si fils droit
+                if(select->fisDroite != NULL){      //si il ya fils droite
+                    pereSelect->fisDroite = select->fisDroite;
+                }else{                              //sinon il y a fils gauche
+                    pereSelect->fisDroite = select->fisGauche;
+                }
+            }else{                               //si fils gauche
+                if(select->fisDroite != NULL){      //si il ya fils droite
+                    pereSelect->fisGauche = select->fisDroite;
+                }else{                              //sinon il y a fils gauche
+                    pereSelect->fisGauche = select->fisGauche;
+                }
+            }
+        }else{ //Si element racine et avec 1 fis on change la racine avec son fis soit droite soit gauche
+            *abr = (select->fisDroite)? select->fisDroite : select->fisGauche;
+        }
+
+        //Element possede deux fils, faut le replacer avec leur ici: predecesseur (ou successeur)
+    }else{
+        T_Noeud* succ = select->fisDroite; //le plus gauche de son fis droite
+        while(succ->fisGauche!=NULL){
+            succ = succ->fisGauche;
+        }
+        //copie de successeur et inheriter les nouveaux fils
+        T_Noeud* remplacement = creer_noeud(succ->idInter, succ->descrip, succ->date);
+        supprimer_recu(&select, succ->date, succ->idInter); //supprimer le element copier, mettre a jour l'arbre
+        //remplacement->fisDroite = (succ == select->fisDroite)? select->fisDroite->fisDroite : select->fisDroite; //ne pas copie soi meme
+        remplacement->fisDroite = select->fisDroite;
+        remplacement->fisGauche = select->fisGauche;
+        //afficher_noeud(remplacement); printf(" (\033[32m+\033[0m)\t\t\033[32mReAjouted!\033[0m\n");
+        if(pereSelect){ //element pas racine
+            if(pereSelect->fisDroite == select){ //si fils droit
+                pereSelect->fisDroite = remplacement;
+            }else{                               //si fils gauche
+                pereSelect->fisGauche = remplacement;
+            }
+        }else{ // Elements racine et avec 2 fils
+            *abr = remplacement;
+        }
+    }
+    printTeteTab();
+    //printf("\033[31m-\033[0m");
+    //afficher_noeud(select); printf(" (\033[31m-\033[0m)\t\t\033[31m Suprimer!\033[0m\n");
+    //printf("\033[0m\n");
+    free_noeud(select);
+
+/*    if(toDelete = rechercher(racine, intervalle, id_entr)){
+        //Recherer le pere en meme temps (pas possible de utiliser directement rechercher car on dois recommencer le recherche pour le parent.
+        // comme ca on peut cree notre algo plus efficace
+        free_noeud(toDelete);
+    }else{
+        printf("\nCette reservation n'existe pas! Aucune action effectuer.");
+    }
+    return;*/
+}
