@@ -27,7 +27,7 @@ int main() {
     while (choix != '7') {
         printf("\n======================================");
         printf("\n1. Afficher toutes les reservations ");
-        printf("\n2. Afficher les reservations d’une entreprise ");
+        printf("\n2. Afficher les reservations d'une entreprise ");
         printf("\n3. Afficher les reservations sur une periode ");
         printf("\n4. Ajouter une reservation ");
         printf("\n5. Modifier une reservation ");
