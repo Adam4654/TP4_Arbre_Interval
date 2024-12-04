@@ -256,7 +256,7 @@ T_Noeud* rechercher(T_Arbre abr, T_inter intervalle, int id_entr){
     while(select != NULL){
         //Si intervale furnit dans une reservation
         if( (intervalle.borneInf >= select->date.borneInf) && (intervalle.borneSup <= select->date.borneSup)){
-            if(id_entr == select->idInter){ //Si id furnit correspend au intervale trouver
+            if(id_entr == select->idInter || id_entr == -1){ //Si id furnit correspend au intervale trouver
                 return select;
             }else{                          //Si id furnit ne correspend pas
                 printf("\nIntervalle trouver, mais pas de idInter = %5d. \nVouliez-vous dire idInterprise: %5d ?", id_entr, select->idInter);
@@ -385,8 +385,8 @@ void supprimer(T_Arbre *abr, T_inter intervalle, int id_entr){
     return;*/
 }
 // 5. Modifier les dates d’une réservation :
-void modifier(T_Arbre* abr, int id_entr, T_inter actuel, T_inter nouveau){//PAS LE PLUS OPTIMALE
-    // CAR 2 fois chercher
+void modifier_old(T_Arbre* abr, int id_entr, T_inter actuel, T_inter nouveau){//PAS LE PLUS OPTIMALE
+    // CAR 2 fois chercher //Essayer de ne pas ganger le prototype
 
     if(abr == NULL) return;
     if(*abr == NULL){
@@ -418,6 +418,40 @@ void modifier(T_Arbre* abr, int id_entr, T_inter actuel, T_inter nouveau){//PAS 
     return;
 }
 
+void modifier(T_Arbre abr, int id_entr, T_inter actuel, T_inter nouveau){
+    // original prototype, abr est une pointeur meme si une pointeur de arbre en realiter et pas de noeud
+    //On le stock dans le bonne type de double pointeur de noeud == pointeur de arbre,
+    //juste quand'on passe le argument adresse d'arbre (T_Arbre*) vers le parametre (T_Arbre) puis en le covert
+    T_Arbre* abr1 = (T_Arbre*) abr;
+    if(abr1 == NULL) return;
+    if(*abr1 == NULL){
+        printf("\nAucun element!");
+        return;
+    }
+
+    T_Noeud* selected = rechercher(*abr1, actuel, id_entr);
+    //Noeud n'existe pas
+    if(!selected){
+      printf("\n Aucun element trouver pour modifier");
+      return;
+    }
+    //Neoud existe
+        //Si les borne nouvelle ne depasse pas leur valeurs originel, pas besoins de changer la structure, juste mettre a jour
+    if(nouveau.borneInf>= selected->date.borneInf && nouveau.borneSup<= selected->date.borneSup){
+        selected->date.borneInf = nouveau.borneInf;
+        selected->date.borneSup = nouveau.borneSup;
+        printf("\nMis a jour!");
+        return;
+    }
+    //Si les borne en dehors d'originale, probeleme de chevauche (soi change structure soi non) \
+        mais plus facile (lisible) et en meme complexite on va reajouter l'element
+    char disc[100];
+    strcpy(disc, selected->descrip);
+    printf("\n");
+    supprimer(abr1, selected->date, selected->idInter);
+    ajouter(abr, id_entr, disc, nouveau);
+    return;
+}
 
 //6.Afficher toutes les réservations présentes dans l’arbre
 void afficher_abr(T_Arbre abr){

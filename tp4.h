@@ -24,14 +24,14 @@ typedef T_Noeud* T_Arbre;
 void viderBuffer ();
 
 /*****************************************Fonctions des étudiant**********************************************/
-void Intervalle_constructor(T_inter *p, int borneInf,int borneSup);
+/*void Intervalle_constructor(T_inter *p, int borneInf,int borneSup);
 
 void Noeud_constructor( T_Noeud *p,
                         T_inter date,
                         int idInter,
                         char* descrip,
                         struct Noeud* fisGauche,
-                        struct Noeud* fisDroite);
+                        struct Noeud* fisDroite);*/
 
 void insert_Noeud(T_Arbre *abr,T_Noeud *New);
 
@@ -51,7 +51,8 @@ T_Noeud *rechercher(T_Arbre abr, T_inter intervalle, int id_entr);
 void supprimer(T_Arbre *abr, T_inter intervalle, int id_entr);
 
 //5.Modifier les dates d’une réservation
-void modifier(T_Arbre* abr, int id_entr, T_inter actuel, T_inter nouveau);
+void modifier_old(T_Arbre* abr, int id_entr, T_inter actuel, T_inter nouveau);
+void modifier(T_Arbre abr, int id_entr, T_inter actuel, T_inter nouveau);
 //CHANGED PROTOTYPE
 
 //6.Afficher toutes les réservations présentes dans l’arbre

@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-
+ //Supression meme si chauvachement !!!! ne faut pas, faire rien.
 #include "tp4.h"
 #define MAX_MEMORY 5
 
@@ -165,8 +165,8 @@ int main() {
                 */
                 viderBuffer ();
                 break;
-            case '5':
-                printf("Comment voulez-vous selectioner le evenement pour modifier?\n");
+            case '5':{
+                /*printf("Comment voulez-vous selectioner le evenement pour modifier?\n");
                 printf("0. Par donnees exactes primitive (faut etre precis sur intervalle ou entre les dates!)\n");
                 printf("1. Par liste complete\n");
                 printf("2. Par Intervalle\n");
@@ -175,10 +175,11 @@ int main() {
                 while (choix2 == ' '){
                     choix2 = getchar();
                     switch(choix2){
-                        case '0':{
+                        case '0':{*/
                             T_inter date;
                             T_inter dateNew;
                             int id = -1;
+                            T_Noeud* overlap, temp;
                             /* V0.5 - old
                             date.borneInf = readDate(1);
                             date.borneSup = readDate(0);
@@ -188,12 +189,24 @@ int main() {
                                 printf("\nId de Entreprise: ");
                                 scanf(" %d", &id);
                             }
-                            printTeteTab();
-                            afficher_noeud(rechercher(arbre, date, id));
+                            /*printTeteTab();
+                            temp = rechercher(arbre, date, id);
+                            if(temp == NULL) break;
+                            afficher_noeud(temp);
+                            */
                             printf("\n - Nouvelle periode - \n");
                             readDate(&dateNew.borneInf, &dateNew.borneSup);
-                            modifier(&arbre, id, date, dateNew);
-                        }
+
+                            if(overlap = rechercher(arbre, dateNew, -1)){ // rechercher sans ID, si une reservation deja contiens l'intervale chevache ou pas
+                                printf("Cette Intervale chevauche avec:\n");
+                                printTeteTab();
+                                afficher_noeud(overlap);
+                                printf("\nAucune Operation Effectuer!!!");
+                            }else{
+                                modifier_old(&arbre, id, date, dateNew);
+                                //modifier_old(&arbre, id, date, dateNew);
+                            }
+                        /*}
                             break;
 
                          // case 1, 2 t odo later if we use file. juste pour mieux User Interface
@@ -201,7 +214,7 @@ int main() {
                          // peut etre on ne le fait pas du tout
                         default:
                             choix2 = ' ';
-                    }
+                    }*/
 
                 }
                 viderBuffer ();
