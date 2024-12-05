@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
- //Supression meme si chauvachement !!!! ne faut pas, faire rien.
+
 #include "tp4.h"
 #define MAX_MEMORY 5
 
@@ -33,7 +33,7 @@ int main() {
         printf("\n5. Modifier une reservation ");
         printf("\n6. Supprimer une reservation");
         printf("\n7. Quitter");
-        printf("\n9. Add DEBUG values in Tree for testing");
+        //printf("\n9. Add DEBUG values in Tree for testing");
         printf("\n======================================");
         printf("\n   Votre choix : ");
         choix = getchar();
@@ -55,41 +55,9 @@ int main() {
             }
             case '3':{
                 T_inter date;
-                /*char dateOK = 0;
-                int day, month, formated;
 
-                //Intervalle de date
-                while(!dateOK){ //Borne inferieur
-                    printf("Date de debut (jj/mm): ");
-                    //Utilisateur peut diviser les jj/mm ou jj.mm ou jj mm ou jj\nmm
-                    scanf(" %d%*[./ -\n]%d", &day, &month);
-                    printf("\nDebut - Jour: %d  Mois: %d", day, month);
-                    if(formated = formaterDate(day, month, leap)){ //valider & convert date
-                        dateOK = 1;
-                    }else{
-                        printf(" \t\t--Invalide!\n");
-                    }
-                }v0,45*/
-                /*v0.5date.borneInf = readDate(1);
-                date.borneSup = readDate(0);
-                */
                 readDate(&date.borneInf, &date.borneSup);
-                /*while(!dateOK){ //Borne supperieur
-                    printf("\nDate de fin (jj/mm): ");
-                    //Utilisateur peut diviser les jj/mm ou jj.mm ou jj mm ou jj\nmm
-                    scanf(" %d%*[./ -\n]%d", &day, &month);
-                    printf("\nFin - Jour: %d  Mois: %d", day, month);
-                    if(formated = formaterDate(day, month, leap)){
-                        dateOK = 1;
-                        if(date.borneInf>formated){ //Si la date valide en existance verifier
-                            dateOK = 0;                 // si plus grand que la date debut
-                            printf("\nDate de debut <= Date de fin!\n");
-                        }
-                    }else{
-                        printf(" \t\t--Invalide!\n");
-                    }
-                }
-                date.borneSup = formated;*/
+
                 printTeteTab();
                 afficher_periode(arbre, date);
                 viderBuffer ();
@@ -99,45 +67,11 @@ int main() {
             case '4':{
 
                 T_inter date;
-                //char dateOK = 0;
-                //int day, month, formated;
+
                 int id = -1;
                 char desc[100];
                 readDate(&date.borneInf, &date.borneSup);
-                //date.borneSup = readDate(0);
-/*
-                //Intervalle de date
-                while(!dateOK){ //Borne inferieur
-                    printf("Date de debut (jj/mm): ");
-                    //Utilisateur peut diviser les jj/mm ou jj.mm ou jj mm ou jj\nmm ou jj-mm
-                    scanf(" %d%*[./ -\n]%d", &day, &month);
-                    printf("\nDebut - Jour: %d  Mois: %d", day, month);
-                    if(formated = formaterDate(day, month, leap)){ //valider & convert date
-                        dateOK = 1;
-                    }else{
-                        printf(" \t\t--Invalide!\n");
-                    }
-                }
-                date.borneInf = formated;
 
-                dateOK = 0;
-                while(!dateOK){ //Borne supperieur
-                    printf("\nDate de fin (jj/mm): ");
-                    //Utilisateur peut diviser les jj/mm ou jj.mm ou jj mm ou jj\nmm
-                    scanf(" %d%*[./ -\n]%d", &day, &month);
-                    printf("\nFin - Jour: %d  Mois: %d", day, month);
-                    if(formated = formaterDate(day, month, leap)){
-                        dateOK = 1;
-                        if(date.borneInf>formated){ //Si la date valide en existance verifier
-                            dateOK = 0;                 // si plus grand que la date debut
-                            printf("\nDate de debut <= Date de fin!\n");
-                        }
-                    }else{
-                        printf(" \t\t--Invalide!\n");
-                    }
-                }
-                date.borneSup = formated;
-*/
 
                 //Id entreprise
                 while(id<0){
@@ -152,48 +86,20 @@ int main() {
                 ajouter(&arbre, id, desc, date);
 
             }
-/*             printf("\t\t\tborne Supérieur:");
-               scanf("%d",&date.borneSup);
-                if(!valide_interval(date))
-                    break;
-                printf("\nentrer votre ID entreprise:");
-                scanf("%d",&ID);
-                printf("\nentrer votre objet:");
-                scanf("%s",des);
-                //T_Noeud* N=(T_Noeud*)malloc(sizeof(T_Noeud));
-                ajouter(arbre,ID,des,date);
-                */
+
                 viderBuffer ();
                 break;
             case '5':{
-                /*printf("Comment voulez-vous selectioner le evenement pour modifier?\n");
-                printf("0. Par donnees exactes primitive (faut etre precis sur intervalle ou entre les dates!)\n");
-                printf("1. Par liste complete\n");
-                printf("2. Par Intervalle\n");
-                printf("3. Par Id de Entreprise\n");
-                char choix2 = ' ';
-                while (choix2 == ' '){
-                    choix2 = getchar();
-                    switch(choix2){
-                        case '0':{*/
                             T_inter date;
                             T_inter dateNew;
                             int id = -1;
                             T_Noeud* overlap, temp;
-                            /* V0.5 - old
-                            date.borneInf = readDate(1);
-                            date.borneSup = readDate(0);
-                            */
                             readDate(&date.borneInf, &date.borneSup);
                             while(id<0){
                                 printf("\nId de Entreprise: ");
                                 scanf(" %d", &id);
                             }
-                            /*printTeteTab();
-                            temp = rechercher(arbre, date, id);
-                            if(temp == NULL) break;
-                            afficher_noeud(temp);
-                            */
+
                             printf("\n - Nouvelle periode - \n");
                             readDate(&dateNew.borneInf, &dateNew.borneSup);
 
@@ -204,17 +110,7 @@ int main() {
                                 printf("\nAucune Operation Effectuer!!!");
                             }else{
                                 modifier_old(&arbre, id, date, dateNew);
-                                //modifier_old(&arbre, id, date, dateNew);
                             }
-                        /*}
-                            break;
-
-                         // case 1, 2 t odo later if we use file. juste pour mieux User Interface
-                         // de selecter directement le choix filtrer
-                         // peut etre on ne le fait pas du tout
-                        default:
-                            choix2 = ' ';
-                    }*/
 
                 }
                 viderBuffer ();
@@ -231,7 +127,7 @@ int main() {
                 viderBuffer ();
                 break;
             }
-            case '9':
+            /*case '9':
                 printTeteTab();
                 T_inter date;
                 date.borneInf = formaterDate(2, 7, leap);
@@ -286,7 +182,7 @@ int main() {
                 break;
             default:
                 viderBuffer ();
-                break;
+                break;*/
         }
         printf("\n\n\n");
         viderBuffer();

@@ -16,95 +16,8 @@ void viderBuffer (){
     } while (c != '\n' && c != EOF);
 }
 
-/*****************************************Fonctions des étudiant**********************************************/
-/* old
-void Intervalle_constructor(T_inter* p, int borneInf, int borneSup){
-    p->borneInf = borneInf;
-    p->borneSup = borneSup;
-}
 
-void Noeud_constructor( T_Noeud *p,
-                        T_inter date,
-                        int idInter,
-                        char* descrip,
-                        struct Noeud* fisGauche,
-                        struct Noeud* fisDroite){
 
-    p->date.borneSup = date.borneSup;
-    p->date.borneInf = date.borneInf;
-    p->idInter = idInter;
-    p->descrip=(char*)malloc(100*sizeof(char));
-    strcpy(p->descrip , descrip);
-
-    p->fisGauche = fisGauche;
-    p->fisDroite = fisDroite;
-
-    return;
-}
-
-void insert_Noeud(T_Arbre *abr, T_Noeud *New) {
-    if ((*abr)==NULL) { // 树非空
-        printf("here2");
-        *abr = New;
-    } else {
-        if ((*abr)->date.borneInf > New->date.borneInf)
-            insert_Noeud(&((*abr)->fisGauche), New);
-        else
-            insert_Noeud(&((*abr)->fisDroite), New);
-    }
-}
-
-int valide_interval(T_inter date){      //manque les cas de recherce les date de arbre
-    //date ne respecte pas les regle
-    int inf_m=0,sup_m=0,inf_j=0,sup_j=0;
-    inf_m=date.borneInf/100;
-    inf_j=date.borneInf-date.borneInf*100;
-    sup_m=date.borneSup/100;
-    sup_j=date.borneSup-date.borneSup*100;
-    if(inf_m<1||inf_m>12){
-        printf("date de début n'est pas valide");
-        return 0;
-    }
-    if(sup_m<1||sup_m>12){
-        printf("date de fin n'est pas valide");
-        return 0;
-    }
-    switch (inf_m) {
-        case 1:
-        case 3:
-        case 5:
-        case 7:
-        case 8:
-        case 10:
-        case 12:    return (1<=inf_j&&inf_j<=31);    break;
-        case 4:
-        case 6:
-        case 9:
-        case 11:    return (1<=inf_j&&inf_j<=30);    break;
-        case 2:     return (1<=inf_j&&inf_j<=29);    break;
-        default:    return 0;
-    }
-    switch (sup_m) {
-        case 1:
-        case 3:
-        case 5:
-        case 7:
-        case 8:
-        case 10:
-        case 12:    return (1<=sup_j&&sup_j<=31);    break;
-        case 4:
-        case 6:
-        case 9:
-        case 11:    return (1<=sup_j&&sup_j<=30);    break;
-        case 2:     return (1<=sup_j&&sup_j<=29);    break;
-        default:    return 0;
-    }
-    if (date.borneSup<date.borneInf)
-        return 0;
-    return 1;
-}
-
-*/
 /*****************************************déclaration des fonctions à implémenter*****************************/
 //1.Créer un noeud - **Done**
 T_Noeud* creer_noeud(int id_entr, char* objet, T_inter intervalle){     //teste pas la date
@@ -235,28 +148,39 @@ void ajouter(T_Arbre* abr, int id_entr, char* objet, T_inter intervalle){
 
 }
 
-/* old
-void ajouter(T_Arbre *abr, int id_entr, char *objet, T_inter intervalle){
-    T_Noeud *N = (T_Noeud *)malloc(sizeof(T_Noeud));
-    Noeud_constructor(N,intervalle,id_entr,objet,NULL,NULL);
-    if(abr==NULL)
-        abr=&N;
-    else{
-        insert_Noeud(abr,N);
-    }
-    return;
-}
-*/
 
 // 3.Rechercher une réservation :
 
 T_Noeud* rechercher(T_Arbre abr, T_inter intervalle, int id_entr){
     T_Noeud* select = abr;
     //Intervalle pas forcement exacte a reservation. Il SUFFIT DE ETRE CONTENU en DEDANS intervale de reservation
+
+    //special call pour trouver si chevauche ou pas avec les autre - code de teste comme en ajout
+    if(id_entr == -1){
+         while(select != NULL){
+            //Si intervale furnit dans une reservation
+
+            if( (intervalle.borneInf >= select->date.borneInf) && (intervalle.borneInf <= select->date.borneSup) ||   //cas born inferieur dans 1 reservatiom
+               (intervalle.borneSup >= select->date.borneInf) && (intervalle.borneSup <= select->date.borneSup)  ||  //cas born superiuer dans 1 reservatiom
+               (intervalle.borneInf <= select->date.borneInf) && (intervalle.borneSup >= select->date.borneSup)       //cas reservation sous interval de nouvaux
+               ){
+                return select;
+            }
+            //Si intervale a gauche
+            if(intervalle.borneInf < select->date.borneInf){
+                select = select->fisGauche;
+            //Si intervale a droite
+            }else if(select->date.borneSup < intervalle.borneInf){
+                select = select->fisDroite;
+            }
+        }   // si aucune cas de chauvache
+        return NULL;
+    }
+
     while(select != NULL){
         //Si intervale furnit dans une reservation
         if( (intervalle.borneInf >= select->date.borneInf) && (intervalle.borneSup <= select->date.borneSup)){
-            if(id_entr == select->idInter || id_entr == -1){ //Si id furnit correspend au intervale trouver
+            if(id_entr == select->idInter){ //Si id furnit correspend au intervale trouver
                 return select;
             }else{                          //Si id furnit ne correspend pas
                 printf("\nIntervalle trouver, mais pas de idInter = %5d. \nVouliez-vous dire idInterprise: %5d ?", id_entr, select->idInter);
@@ -346,7 +270,7 @@ void supprimer(T_Arbre *abr, T_inter intervalle, int id_entr){
             *abr = (select->fisDroite)? select->fisDroite : select->fisGauche;
         }
 
-    //Element possede deux fils, faut le replacer avec leur ici: predecesseur (ou successeur)
+    //Element possede deux fils, faut le replacer avec leur ici: successeur (ou predecesseur)
     }else{
         T_Noeud* succ = select->fisDroite; //le plus gauche de son fis droite
         while(succ->fisGauche!=NULL){
@@ -375,14 +299,6 @@ void supprimer(T_Arbre *abr, T_inter intervalle, int id_entr){
     //printf("\033[0m\n");
     free_noeud(select);
 
-/*    if(toDelete = rechercher(racine, intervalle, id_entr)){
-        //Recherer le pere en meme temps (pas possible de utiliser directement rechercher car on dois recommencer le recherche pour le parent.
-        // comme ca on peut cree notre algo plus efficace
-        free_noeud(toDelete);
-    }else{
-        printf("\nCette reservation n'existe pas! Aucune action effectuer.");
-    }
-    return;*/
 }
 // 5. Modifier les dates d’une réservation :
 void modifier_old(T_Arbre* abr, int id_entr, T_inter actuel, T_inter nouveau){//PAS LE PLUS OPTIMALE
@@ -459,19 +375,6 @@ void afficher_abr(T_Arbre abr){
 
     }else{
         afficher_abr(abr->fisGauche);
-        /*int inf_m=0,sup_m=0,inf_j=0,sup_j=0;
-        inf_m=abr->date.borneInf/100;
-        //printf("month1 %d",inf_m);
-        inf_j=abr->date.borneInf-inf_m*100;
-        //printf("day1 %d",inf_j);
-        sup_m=abr->date.borneSup/100;
-        //printf("month2 %d",sup_m);
-        sup_j=abr->date.borneSup-sup_m*100;
-        //printf("day2 %d",sup_j);
-        printf("\nID de Entreprise:%d\t",abr->idInter);
-        printf("Objet:%s\t",abr->descrip);
-        printf("debut de %d/%d, fin de %d/%d",inf_m,inf_j,sup_m,sup_j);
-        */
         afficher_noeud(abr);
         afficher_abr(abr->fisDroite);
     }
@@ -483,25 +386,9 @@ void afficher_entr(T_Arbre abr, int id_entr){
     if(abr==NULL) {
 
     }else{
-        /*
-        int inf_m=0,sup_m=0,inf_j=0,sup_j=0;
-        inf_m=abr->date.borneInf/100;
-        //printf("month1 %d",inf_m);
-        inf_j=abr->date.borneInf-inf_m*100;
-        //printf("day1 %d",inf_j);
-        sup_m=abr->date.borneSup/100;
-        //printf("month2 %d",sup_m);
-        sup_j=abr->date.borneSup-sup_m*100;
-        //printf("day2 %d",sup_j);
-        */
         afficher_entr(abr->fisGauche, id_entr);
         if (abr->idInter==id_entr) {
             afficher_noeud(abr);
-            /*
-            printf("\nNumero de Entreprise:%d\t", abr->idInter);
-            printf("Nom de Entreprise:%s\t", abr->descrip);
-            printf("debut de %d/%d, fin de %d/%d", inf_m, inf_j, sup_m, sup_j);
-            */
         }
         afficher_entr(abr->fisDroite,id_entr);
     }
@@ -518,20 +405,7 @@ void afficher_periode(T_Arbre abr, T_inter periode){
         if (abr->date.borneSup<periode.borneInf||abr->date.borneInf>periode.borneSup){
         }
         else {
-            /*
-            int inf_m=0,sup_m=0,inf_j=0,sup_j=0;
-            inf_m=abr->date.borneInf/100;
-            //printf("month1 %d",inf_m);
-            inf_j=abr->date.borneInf-inf_m*100;
-            //printf("day1 %d",inf_j);
-            sup_m=abr->date.borneSup/100;
-            //printf("month2 %d",sup_m);
-            sup_j=abr->date.borneSup-sup_m*100;
-            //printf("day2 %d",sup_j);
-            printf("\nNumero de Entreprise:%d\t", abr->idInter);
-            printf("Nom de Entreprise:%s\t", abr->descrip);
-            printf("debut de %d/%d, fin de %d/%d", inf_m, inf_j, sup_m, sup_j);
-            */
+
             afficher_noeud(abr);
         }
         if (abr->date.borneInf<periode.borneSup)
